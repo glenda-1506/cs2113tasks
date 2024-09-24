@@ -14,12 +14,14 @@ public class Main {
 
         System.out.println("Printing all data ...");
         printAllData(tasksData);
+        printDataWithStreams(tasksData);
 
         System.out.println("Printing deadlines ...");
         printDeadlines(tasksData);
+        printDeadlineWithStreams(tasksData);
 
-        System.out.println("Total number of deadlines: " + countDeadlines(tasksData));
-
+        System.out.println("Total number of deadlines (iteration): " + countDeadlines(tasksData));
+        System.out.println("Total number of deadlines (with streams): " + countDeadlineWithStreams(tasksData));
     }
 
     private static int countDeadlines(ArrayList<Task> tasksData) {
