@@ -4,7 +4,10 @@ import se.edu.streamdemo.data.Datamanager;
 import se.edu.streamdemo.task.Deadline;
 import se.edu.streamdemo.task.Task;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
+
+import static java.util.stream.Collectors.toList;
 
 public class Main {
     public static void main(String[] args) {
@@ -18,10 +21,14 @@ public class Main {
 
         System.out.println("Printing deadlines ...");
         printDeadlines(tasksData);
-        printDeadlineWithStreams(tasksData);
+        printDeadlinesUsingStream(tasksData);
 
-        System.out.println("Total number of deadlines (iteration): " + countDeadlines(tasksData));
+        System.out.println("Total number of deadlines: " + countDeadlines(tasksData));
         System.out.println("Total number of deadlines (with streams): " + countDeadlineWithStreams(tasksData));
+
+
+        ArrayList<Task> filteredList = filterTasksByStreams(tasksData, "11");
+        printAllData(filteredList);
     }
 
     private static int countDeadlines(ArrayList<Task> tasksData) {
@@ -56,11 +63,19 @@ public class Main {
         }
     }
 
-    public static void printDeadlineWithStreams(ArrayList<Task> tasks) {
-        System.out.println("Printing deadlines with streams");
+    public static void printDeadlinesUsingStream(ArrayList<Task> tasks) {
+        System.out.println("Printing deadlines using stream");
         tasks.stream()
-                .filter(t -> t instanceof Deadline) //lambda function
+                .filter(t -> t instanceof Deadline)
+                .sorted((t1, t2) -> t1.getDescription().compareToIgnoreCase(t2.getDescription()))
                 .forEach(System.out::println);
+    }
+
+    public static ArrayList<Task> filterTasksByStreams(ArrayList<Task> tasks, String filteredString) {
+        ArrayList<Task> filteredList = (ArrayList<Task>) tasks.stream()
+                .filter(t -> t.getDescription().contains(filteredString))
+                .collect(toList());
+        return filteredList;
     }
 
     public static int countDeadlineWithStreams(ArrayList<Task> tasks) {
